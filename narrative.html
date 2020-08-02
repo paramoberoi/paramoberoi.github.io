@@ -1,0 +1,567 @@
+<html>
+<title>HTML Tutorial</title>
+<script src='https://d3js.org/d3.v5.min.js'></script>
+
+<body onload='init()'>
+
+<h1>This is a heading</h1>
+<p>This is a paragraph.</p>
+
+<div>
+  <label>Select Fuel Type: </label>
+  <label><input type="checkbox" name="fuel_type" class="fuel_type_cb" value="Gasoline" checked="checked"/>
+    Gasoline</label>
+  <label><input type="checkbox" name="fuel_type" class="fuel_type_cb" value="Diesel" checked="checked"/> Diesel</label>
+  <label><input type="checkbox" name="fuel_type" class="fuel_type_cb" value="Electricity" checked="checked"/>
+    Electricity</label>
+<!--  <button type='button' onclick='checkAllFuels()'>CheckAll</button>-->
+<!--  <button type='button' onclick='uncheckAllFuels()'>UncheckAll</button>-->
+</div>
+
+<div class="country">
+  <label>Select Country: </label>
+  <label><input type="checkbox" name="country" class="country_cb" value="Germany" checked="checked"/> Germany</label>
+  <label><input type="checkbox" name="country" class="country_cb" value="Italy" checked="checked"/> Italy</label>
+  <label><input type="checkbox" name="country" class="country_cb" value="Japan" checked="checked"/> Japan</label>
+  <label><input type="checkbox" name="country" class="country_cb" value="South Korea" checked="checked"/> South
+    Korea</label>
+  <label><input type="checkbox" name="country" class="country_cb" value="Sweden" checked="checked"/> Sweden</label>
+  <label><input type="checkbox" name="country" class="country_cb" value="United Kingdom" checked="checked"/> United
+    Kingdom</label>
+  <label><input type="checkbox" name="country" class="country_cb" value="USA" checked="checked"/> USA</label>
+<!--  <button type='button' onclick='checkAllCountries()'>CheckAll</button>-->
+<!--  <button type='button' onclick='uncheckAllCountries()'>UncheckAll</button>-->
+</div>
+
+<div class="cylinder">
+  <label>Select # of cylinders: </label>
+  <label><input type="checkbox" name="cylinder" class="cylinder_cb" value="0" checked="checked"/> 0</label>
+  <label><input type="checkbox" name="cylinder" class="cylinder_cb" value="2" checked="checked"/> 2</label>
+  <label><input type="checkbox" name="cylinder" class="cylinder_cb" value="3" checked="checked"/> 3</label>
+  <label><input type="checkbox" name="cylinder" class="cylinder_cb" value="4" checked="checked"/> 4 </label>
+  <label><input type="checkbox" name="cylinder" class="cylinder_cb" value="6" checked="checked"/> 6</label>
+  <label><input type="checkbox" name="cylinder" class="cylinder_cb" value="8" checked="checked"/> 8</label>
+  <label><input type="checkbox" name="cylinder" class="cylinder_cb" value="10" checked="checked"/> 10</label>
+  <label><input type="checkbox" name="cylinder" class="cylinder_cb" value="12" checked="checked"/> 12</label>
+<!--  <button type='button' onclick='checkAllCylinders()'>CheckAll</button>-->
+<!--  <button type='button' onclick='uncheckAllCylinders()'>UncheckAll</button>-->
+</div>
+
+<div class="all">
+<button type='button' onclick='checkAll()'>CheckAll</button>
+<button type='button' onclick='uncheckAll()'>UncheckAll</button>
+</div>
+
+<svg id="Chart" width=900 height=1050></svg>
+
+<!--<svg id="TextBox" width="200" height="100">-->
+<!--&lt;!&ndash;<rect x="0" y="0" width="200" height="100" stroke="black" stroke-width="3px" fill="white"/>&ndash;&gt;-->
+<!--&lt;!&ndash;<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">TEXT</text>&ndash;&gt;-->
+<!--</svg>-->
+
+<style> .axis {
+  font: 14px sans-serif;
+}</style>
+
+<script>
+
+  let countries = ['Germany', 'Italy', 'Japan', 'South Korea', 'Sweden', 'United Kingdom', 'USA'];
+  let fuel_types = ['Gasoline', 'Diesel', 'Electricity'];
+  let cylinder_types = ['0', '2', '3', '4', '6', '8', '10', '12'];
+
+  let filtered_countries = countries.map(function (country) {return country;});
+  let filtered_fuel_types = fuel_types.map(function (fuel_type) {return fuel_type;});
+  let filtered_cylinder_types = cylinder_types.map(function (cylinder_type) {return cylinder_type;});
+
+  let data;
+  let filtered_dataset;
+  let unique_makes = [...new Set()];
+
+  let chart = d3.select("#Chart"),
+    margin = {top: 50, right: 50, bottom: 50, left: 50},
+    width = +chart.attr("width") - margin.left - margin.right,
+    height = +chart.attr("height") - margin.top - margin.bottom,
+    x_height = +chart.attr("height") - margin.bottom,
+    x_tb_start = margin.left + 500 + 50 ;
+    x_tx_start = x_tb_start + 10 ;
+    y_tb_start = margin.top + 20 ;
+    y_tx_start = y_tb_start + 20 ;
+    y_hd_start = y_tb_start - 20 ;
+    x_hd_start = x_tb_start ;
+
+  let xScale = d3.scaleBand()
+    .domain(['AverageHighwayMPG', 'AverageCityMPG'])
+    // .domain(filtered_dataset.map(d => d.label))
+    .rangeRound([0, 500])
+    .padding(0.1);
+
+  // console.log(xScale('AverageHighwayMPG'));
+  // console.log(xScale('AverageCityMPG'));
+
+  let yScale = d3.scaleLinear()
+    .domain([0, 150])
+    .range([height, 0]);
+
+  let ax = d3.axisBottom(xScale);
+
+  let ay = d3.axisLeft(yScale);
+
+  let yTextPadding = 20;
+
+
+  function checkAll() {
+    d3.selectAll('.fuel_type_cb').property('checked', true);
+    d3.selectAll(".country_cb").property('checked', true);
+    d3.selectAll(".cylinder_cb").property('checked', true);
+    filtered_countries = countries.map(function (country) {return country;});
+    filtered_fuel_types = fuel_types.map(function (fuel_type) {return fuel_type;});
+    filtered_cylinder_types = cylinder_types.map(function (cylinder_type) {return cylinder_type;});
+    update();
+  }
+
+  function uncheckAll() {
+    d3.selectAll('.fuel_type_cb').property('checked', false);
+    d3.selectAll(".country_cb").property('checked', false);
+    d3.selectAll(".cylinder_cb").property('checked', false);
+    filtered_fuel_types = [];
+    filtered_countries = [];
+    filtered_cylinder_types = [];
+    update();
+  }
+
+  //Country checkbox changes
+  d3.selectAll(".country_cb").on("change", function () {
+    let type = this.value;
+    if (this.checked) {
+      let selected_countries = countries.filter(function (country) {
+        return country == type;
+      });
+      filtered_countries = filtered_countries.concat(selected_countries);
+    } else {
+      filtered_countries = filtered_countries.filter(function (country) {
+        return country != type;
+      });
+    }
+
+
+    let country_filtered_data = data.filter(function (d) {
+      return (filtered_countries.indexOf(d.Country) !== -1);
+    });
+
+    d3.selectAll(".cylinder_cb").each(function (d) {
+      cb = d3.select(this);
+      if (cb.property("checked")) {
+        let country_filtered_data_cylinder = country_filtered_data.filter(function (d) {
+          return (d.EngineCylinders === cb.property("value"));
+        });
+        if (country_filtered_data_cylinder.length === 0) {
+          cb.property('checked', false);
+
+          for(var i=0;i<filtered_cylinder_types.length;i++){
+            if(filtered_cylinder_types[i] === cb.property("value")){
+              filtered_cylinder_types.splice(i--,1);
+            }
+          }
+
+        }
+      }
+
+      // if (!cb.property('checked')) {
+      //   let country_filtered_data_cylinder = country_filtered_data.filter(function (d) {
+      //     return (d.EngineCylinders === cb.property("value"));
+      //   });
+      //   if (country_filtered_data_cylinder.length !== 0) {
+      //     cb.property('checked', true);
+      //     filtered_cylinder_types.push(cb.property("value"))
+      //   }
+      // }
+    });
+
+    d3.selectAll(".fuel_type_cb").each(function (d) {
+      cb = d3.select(this);
+      if (cb.property("checked")) {
+        let country_filtered_data_fuel = country_filtered_data.filter(function (d) {
+          return (d.Fuel === cb.property("value"));
+        });
+        if (country_filtered_data_fuel.length === 0) {
+          cb.property('checked', false)
+          for(var i=0;i<filtered_fuel_types.length;i++){
+            if(filtered_fuel_types[i] === cb.property("value")){
+              filtered_fuel_types.splice(i--,1);
+            }
+          }
+        }
+      }
+
+      // if (!cb.property('checked')) {
+      //   let country_filtered_data_fuel = country_filtered_data.filter(function (d) {
+      //     return (d.Fuel === cb.property("value"));
+      //   });
+      //   if (country_filtered_data_fuel.length !== 0) {
+      //     cb.property('checked', true);
+      //     filtered_fuel_types.push(cb.property("value"))
+      //
+      //   }
+      // }
+    });
+    update();
+  });
+
+  //Fuel checkbox changes
+  d3.selectAll(".fuel_type_cb").on("change", function () {
+    let type = this.value;
+    if (this.checked) {
+      let selected_fuel_types = fuel_types.filter(function (fuel_type) {
+        return fuel_type == type;
+      });
+      filtered_fuel_types = filtered_fuel_types.concat(selected_fuel_types);
+    } else {
+      filtered_fuel_types = filtered_fuel_types.filter(function (fuel_type) {
+        return fuel_type != type;
+      });
+    }
+
+    let fuel_filtered_data = data.filter(function (d) {
+      return (filtered_fuel_types.indexOf(d.Fuel) !== -1);
+    });
+    d3.selectAll(".cylinder_cb").each(function (d) {
+      cb = d3.select(this);
+      if (cb.property("checked")) {
+        let fuel_filtered_data_cylinder = fuel_filtered_data.filter(function (d) {
+          return (d.EngineCylinders === cb.property("value"));
+        });
+        if (fuel_filtered_data_cylinder.length === 0) {
+          cb.property('checked', false)
+          for(var i=0;i<filtered_cylinder_types.length;i++){
+            if(filtered_cylinder_types[i] === cb.property("value")){
+              filtered_cylinder_types.splice(i--,1);
+            }
+          }
+        }
+      }
+
+      // if (!cb.property('checked')) {
+      //   let fuel_filtered_data_cylinder = fuel_filtered_data.filter(function (d) {
+      //     return (d.EngineCylinders === cb.property("value"));
+      //   });
+      //   if (fuel_filtered_data_cylinder.length !== 0) {
+      //     cb.property('checked', true);
+      //     filtered_cylinder_types.push(cb.property("value"))
+      //
+      //   }
+      // }
+    });
+
+    d3.selectAll(".country_cb").each(function (d) {
+      cb = d3.select(this);
+      if (cb.property("checked")) {
+        let fuel_filtered_data_country = fuel_filtered_data.filter(function (d) {
+          return (d.Country === cb.property("value"));
+        });
+        if (fuel_filtered_data_country.length === 0) {
+          cb.property('checked', false);
+          for(var i=0;i<filtered_countries.length;i++){
+            if(filtered_countries[i] === cb.property("value")){
+              filtered_countries.splice(i--,1);
+            }
+          }
+        }
+      }
+
+      // if (!cb.property('checked')) {
+      //   let fuel_filtered_data_country = fuel_filtered_data.filter(function (d) {
+      //     return (d.Country === cb.property("value"));
+      //   });
+      //   if (fuel_filtered_data_country.length !== 0) {
+      //     cb.property('checked', true);
+      //     filtered_countries.push(cb.property("value"))
+      //
+      //   }
+      // }
+    });
+
+    update();
+  });
+
+
+  //Cylinder checkbox changes
+
+  d3.selectAll(".cylinder_cb").on("change", function () {
+    let type = this.value;
+    if (this.checked) {
+      let selected_cylinder_types = cylinder_types.filter(function (cylinder_type) {
+        return cylinder_type == type;
+      });
+      filtered_cylinder_types = filtered_cylinder_types.concat(selected_cylinder_types);
+    } else {
+      filtered_cylinder_types = filtered_cylinder_types.filter(function (cylinder_type) {
+        return cylinder_type != type;
+      });
+    }
+    // console.log(filtered_cylinder_types);
+
+    let cylinder_filtered_data = data.filter(function (d) {
+      return (filtered_cylinder_types.indexOf(d.EngineCylinders) !== -1);
+    });
+
+    d3.selectAll(".fuel_type_cb").each(function (d) {
+      cb = d3.select(this);
+      if (cb.property("checked")) {
+        let cylinder_filtered_data_fuel = cylinder_filtered_data.filter(function (d) {
+          return (d.Fuel === cb.property("value"));
+        });
+        // console.log(cylinder_filtered_data_fuel.length);
+        if (cylinder_filtered_data_fuel.length === 0) {
+          cb.property('checked', false);
+          for(var i=0;i<filtered_fuel_types.length;i++){
+            if(filtered_fuel_types[i] === cb.property("value")){
+              filtered_fuel_types.splice(i--,1);
+            }
+          }
+        }
+        // console.log(cb.property("value"))
+      }
+
+      // if (!cb.property('checked')) {
+      //   let cylinder_filtered_data_fuel = cylinder_filtered_data.filter(function (d) {
+      //     return (d.Fuel === cb.property("value"));
+      //   });
+      //   // console.log(cylinder_filtered_data_fuel.length);
+      //   if (cylinder_filtered_data_fuel.length !== 0) {
+      //     cb.property('checked', true);
+      //     filtered_fuel_types.push(cb.property("value"))
+      //
+      //   }
+      //   // console.log(cb.property("value"))
+      // }
+
+    });
+
+    d3.selectAll(".country_cb").each(function (d) {
+      cb = d3.select(this);
+      if (cb.property("checked")) {
+        let cylinder_filtered_data_country = cylinder_filtered_data.filter(function (d) {
+          return (d.Country === cb.property("value"));
+        });
+        // console.log(cylinder_filtered_data_country.length);
+        if (cylinder_filtered_data_country.length === 0) {
+          cb.property('checked', false);
+          for(var i=0;i<filtered_countries.length;i++){
+            if(filtered_countries[i] === cb.property("value")){
+              filtered_countries.splice(i--,1);
+            }
+          }
+        }
+        // console.log(cb.property("value"))
+      }
+
+      // if (!cb.property('checked')) {
+      //   let cylinder_filtered_data_country = cylinder_filtered_data.filter(function (d) {
+      //     return (d.Country === cb.property("value"));
+      //   });
+      //   // console.log(cylinder_filtered_data_country.length);
+      //   if (cylinder_filtered_data_country.length !== 0) {
+      //     cb.property('checked', true);
+      //     filtered_countries.push(cb.property("value"))
+      //
+      //   }
+      //   // console.log(cb.property("value"))
+      // }
+    });
+
+    update();
+  });
+
+
+  function update() {
+    chart.selectAll('rect').remove();
+    chart.selectAll('line').remove();
+    chart.selectAll('text').remove();
+    d3.selectAll('.barText').remove();
+
+
+    // console.log(data);
+    // console.log(filtered_fuel_types);
+    // console.log(filtered_countries);
+    let filtered_data = data.filter(function (d) {
+      return (filtered_fuel_types.indexOf(d.Fuel) !== -1 && filtered_countries.indexOf(d.Country) !== -1
+        && filtered_cylinder_types.indexOf(d.EngineCylinders) !== -1);
+    });
+    // console.log(filtered_data);
+    if (filtered_data.length !== 0) {
+      let AverageHighwayMPGMean = d3.mean(filtered_data.map(function (d) {
+        return d.AverageHighwayMPG
+      }));
+      let AverageCityMPGMean = d3.mean(filtered_data.map(function (d) {
+        return d.AverageCityMPG
+      }));
+
+      filtered_dataset = [{
+        "label": "AverageHighwayMPG",
+        "value": AverageHighwayMPGMean,
+        "color": "#f5ba96"
+      },
+        {
+          "label": "AverageCityMPG",
+          "value": AverageCityMPGMean,
+          "color": "#7ff3f5"
+        }
+      ];
+
+      let filtered_makes = filtered_data.map(function (d) {return d.Make;});
+      // console.log(filtered_makes);
+      unique_makes = [...new Set(filtered_makes)];
+      // console.log(unique_makes);
+
+      renderBars(filtered_dataset);
+    }
+  }
+
+  function renderBars(data) {
+    // console.log(data);
+
+    d3.select("#Chart")
+      .append("g")
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+      .call(ay);
+
+    d3.select("#Chart")
+      .append("g")
+      .attr("class", "axis")
+      .attr('transform', 'translate(' + margin.left + ',' + x_height + ')')
+      .call(ax)
+      .selectAll("text")
+      .style("text-anchor", "centre")
+      .attr("dx", "-.8em")
+      .attr("dy", ".99em");
+
+
+    d3.select("#Chart")
+      .append("g")
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+      .selectAll('rect')
+      .data(data)
+      .enter()
+      .append("rect")
+      .attr("x", function (d, i) {
+        // return (width/3)*(i+1);
+        return (i * 240 + 90);
+      })
+      .attr("y", function (d) {
+        return height
+      })
+      .attr("width", 80)
+      .attr("height", function (d) {
+        return 0;
+      })
+      .transition().duration(2000).delay(200)
+      .attr("x", function (d, i) {
+        return (i * 240 + 90);
+      })
+      .attr("y", function (d) {
+        return yScale(d.value)
+      })
+      .attr("width", 80)
+      .attr("height", function (d) {
+        return height - yScale(d.value);
+      })
+      .attr("fill", function (d) {
+        return d.color
+      });
+
+    d3.select("#Chart")
+      .append("g")
+      .attr('transform', 'translate(' + x_tb_start + ',' + y_tb_start + ')')
+      .selectAll('rect')
+      .data(["1"])
+      .enter()
+      .append("rect")
+      .attr("x",0)
+      .attr("y",0)
+      .attr("width",200)
+      .attr("height",900)
+      .attr("stroke","black")
+      .attr("fill","white");
+
+    d3.select("#Chart")
+      .append("g")
+      .attr('transform', 'translate(' + x_tx_start + ',' + y_tx_start + ')')
+      .selectAll('text')
+      .data(unique_makes)
+      .enter()
+      .append('text')
+      .text(function(d) { return d; })
+      .attr('y', function(d,i) { return 20 * i })
+
+    d3.select("#Chart")
+      .append("g")
+      .attr('transform', 'translate(' + x_hd_start + ',' + y_hd_start+ ')')
+      .selectAll('text')
+      .data(["Participating Makes:"])
+      .enter()
+      .append('text')
+      .text(function(d) { return d; });
+
+    // d3.select("#Chart")
+    //   .append("g")
+    //   .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+    //   .selectAll('line')
+    //   .data(data)
+    //   .enter()
+    //   .append('line')
+    //   .style("stroke", "black")
+    //   .style("stroke-width", 2)
+    //   .attr("x1", function (d, i) {
+    //     return (i * 240 + 170);
+    //   })
+    //   .attr("y1", function (d) {
+    //     return yScale(d.value)
+    //   })
+    //   .attr("x2", function (d, i) {
+    //     return (i * 240 + 170);
+    //   })
+    //   .attr("y2", function (d) {
+    //     return yScale(d.value)
+    //   })
+    //   .transition().delay(2000)
+    //   .attr("x2", function (d, i) {
+    //     return (i * 240 + 250);
+    //   })
+    //   .attr("y2", function (d) {
+    //     return yScale(d.value) - 100
+    //   });
+
+    d3.select("#Chart")
+      .append("g")
+      .selectAll(".barText")
+      .data(data)
+      .enter()
+      .append("text")
+      .attr("class", "barText")
+      .attr("text-anchor", "middle")
+      .attr("x", function (d, i) {
+        return (i * 240 + 170);
+        // return (xScale(d.label) + margin.left);
+      })
+      .attr("y", function (d, i) {
+        return yScale(d.value) + margin.top - yTextPadding;
+      })
+      .transition().delay(2000)
+      .text(function (d) {
+        return "MPG = " + d.value.toFixed(2);
+      });
+
+  }
+
+  async function init() {
+    data = await d3.csv(
+      'https://raw.githubusercontent.com/paramoberoi/dataviz-narrative/master/cars2017.csv'
+      // 'https://flunky.github.io/cars2017.csv'
+    );
+    // console.log(data);
+
+    update();
+  }
+</script>
+</body>
+</html>

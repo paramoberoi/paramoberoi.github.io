@@ -1,0 +1,147 @@
+﻿Make,Fuel,EngineCylinders,AverageHighwayMPG,AverageCityMPG,Country
+Acura,Gasoline,4,35,25,Japan
+Acura,Gasoline,6,28,21,Japan
+Alfa Romeo,Gasoline,4,33,24,Italy
+Alfa Romeo,Gasoline,6,24,17,Italy
+Aston Martin,Gasoline,12,19,12,United Kingdom
+Audi,Gasoline,4,30,23,Germany
+Audi,Gasoline,6,27,19,Germany
+Audi,Gasoline,8,26,17,Germany
+Audi,Gasoline,10,22,14,Germany
+Audi,Gasoline,4,32,24,Germany
+Bentley,Gasoline,8,22,13,United Kingdom
+Bentley,Gasoline,12,20,12,United Kingdom
+BMW,Diesel,4,41,30,Germany
+BMW,Diesel,6,29,23,Germany
+BMW,Electricity,0,109,133,Germany
+BMW,Gasoline,2,33,36,Germany
+BMW,Gasoline,3,29,28,Germany
+BMW,Gasoline,4,32,23,Germany
+BMW,Gasoline,6,28,19,Germany
+BMW,Gasoline,8,23,15,Germany
+BMW,Gasoline,12,20,13,Germany
+Buick,Gasoline,4,27,20,USA
+Buick,Gasoline,4,31,23,USA
+Buick,Gasoline,6,26,18,USA
+Cadillac,Gasoline,4,30,22,USA
+Cadillac,Gasoline,6,25,17,USA
+Cadillac,Gasoline,8,21,14,USA
+Cadillac,Gasoline,4,32,22,USA
+Cadillac,Gasoline,6,26,18,USA
+Cadillac,Gasoline,8,21,15,USA
+Chevrolet,Diesel,4,29,21,USA
+Chevrolet,Electricity,0,110,128,USA
+Chevrolet,Gasoline,4,31,21,USA
+Chevrolet,Gasoline,8,23,15,USA
+Chevrolet,Gasoline,4,34,27,USA
+Chevrolet,Gasoline,6,24,17,USA
+Chevrolet,Gasoline,8,21,15,USA
+Chrysler,Gasoline,8,25,16,USA
+Chrysler,Gasoline,4,36,23,USA
+Chrysler,Gasoline,6,29,20,USA
+Dodge,Gasoline,8,24,15,USA
+Dodge,Gasoline,8,23,14,USA
+Dodge,Gasoline,10,19,12,USA
+Dodge,Gasoline,4,25,19,USA
+Dodge,Gasoline,6,27,18,USA
+Ferrari,Gasoline,8,22,16,Italy
+Ferrari,Gasoline,12,16,12,Italy
+Fiat,Electricity,0,103,121,Italy
+Fiat,Gasoline,4,34,26,Italy
+Fiat,Gasoline,4,30,22,Italy
+Ford,Electricity,0,96,118,USA
+Ford,Gasoline,4,25,19,USA
+Ford,Gasoline,6,18,11,USA
+Ford,Gasoline,8,21,14,USA
+Ford,Gasoline,3,40,29,USA
+Ford,Gasoline,4,31,24,USA
+Ford,Gasoline,6,23,17,USA
+Ford,Gasoline,8,22,15,USA
+Genesis,Gasoline,6,24,17,South Korea
+Genesis,Gasoline,8,23,15,South Korea
+Genesis,Gasoline,6,27,17,South Korea
+GMC,Diesel,4,29,21,USA
+GMC,Gasoline,4,27,20,USA
+GMC,Gasoline,6,23,17,USA
+GMC,Gasoline,8,21,15,USA
+Honda,Gasoline,4,38,30,Japan
+Honda,Gasoline,4,37,29,Japan
+Honda,Gasoline,6,28,19,Japan
+Hyundai,Electricity,0,122,150,South Korea
+Hyundai,Gasoline,4,34,27,South Korea
+Hyundai,Gasoline,6,25,18,South Korea
+Infiniti,Gasoline,4,30,22,Japan
+Infiniti,Gasoline,6,27,20,Japan
+Infiniti,Gasoline,8,22,15,Japan
+Infiniti,Gasoline,4,27,25,Japan
+Jaguar,Diesel,4,39,30,United Kingdom
+Jaguar,Gasoline,4,30,21,United Kingdom
+Jaguar,Gasoline,6,26,18,United Kingdom
+Jaguar,Gasoline,8,23,15,United Kingdom
+Jeep,Gasoline,6,27,19,USA
+Jeep,Gasoline,8,22,14,USA
+Jeep,Gasoline,4,31,24,USA
+Jeep,Gasoline,8,19,13,USA
+Jeep,Gasoline,4,27,21,USA
+Jeep,Gasoline,6,22,17,USA
+Kia,Electricity,0,92,120,South Korea
+Kia,Gasoline,8,23,15,South Korea
+Kia,Gasoline,4,33,27,South Korea
+Kia,Gasoline,6,25,18,South Korea
+Lamborghini,Gasoline,10,21,14,Italy
+Lamborghini,Gasoline,12,17,10,Italy
+Land Rover,Diesel,6,28,22,United Kingdom
+Land Rover,Gasoline,4,27,20,United Kingdom
+Land Rover,Gasoline,6,23,17,United Kingdom
+Land Rover,Gasoline,8,19,14,United Kingdom
+Lexus,Gasoline,4,30,22,Japan
+Lexus,Gasoline,6,28,21,Japan
+Lexus,Gasoline,8,22,16,Japan
+Lexus,Gasoline,4,36,39,Japan
+Lexus,Gasoline,6,28,20,Japan
+Lincoln,Gasoline,4,29,23,USA
+Lincoln,Gasoline,6,24,16,USA
+Lotus,Gasoline,6,24,17,USA
+Maserati,Gasoline,6,24,16,Italy
+Maserati,Gasoline,8,20,14,Italy
+Mazda,Gasoline,4,34,26,Japan
+Mazda,Gasoline,4,35,27,Japan
+McLaren,Gasoline,8,23,16,United Kingdom
+Mercedes-Benz,Electricity,0,82,85,Germany
+Mercedes-Benz,Gasoline,4,30,23,Germany
+Mercedes-Benz,Gasoline,6,25,19,Germany
+Mercedes-Benz,Gasoline,8,22,16,Germany
+Mercedes-Benz,Gasoline,12,20,13,Germany
+MINI,Gasoline,4,33,24,United Kingdom
+Mitsubishi,Electricity,0,102,121,Japan
+Mitsubishi,Gasoline,6,27,20,Japan
+Mitsubishi,Gasoline,3,42,35,Japan
+Mitsubishi,Gasoline,4,31,24,Japan
+Nissan,Electricity,0,101,124,Japan
+Nissan,Gasoline,4,31,26,Japan
+Nissan,Gasoline,6,26,18,Japan
+Nissan,Gasoline,4,33,26,Japan
+Nissan,Gasoline,6,25,18,Japan
+Nissan,Gasoline,8,20,14,Japan
+Porsche,Gasoline,4,27,21,Germany
+Porsche,Gasoline,6,26,19,Germany
+Porsche,Gasoline,8,21,14,Germany
+Ram,Gasoline,8,21,14,USA
+Ram,Gasoline,4,28,21,USA
+Ram,Gasoline,6,24,17,USA
+Rolls-Royce,Gasoline,12,19,12,United Kingdom
+Roush Performance,Gasoline,8,23,14,USA
+smart,Gasoline,3,39,32,USA
+Subaru,Gasoline,4,27,21,Japan
+Subaru,Gasoline,4,33,25,Japan
+Subaru,Gasoline,6,28,20,Japan
+Tesla,Electricity,0,98,92,USA
+Toyota,Gasoline,4,30,23,Japan
+Toyota,Gasoline,4,35,32,Japan
+Toyota,Gasoline,6,25,20,Japan
+Toyota,Gasoline,8,18,13,Japan
+Volkswagen,Gasoline,4,28,21,Germany
+Volkswagen,Gasoline,4,33,24,Germany
+Volkswagen,Gasoline,6,25,18,Germany
+Volvo,Gasoline,4,29,22,Sweden
+Volvo,Gasoline,4,32,23,Sweden
